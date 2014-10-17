@@ -35,6 +35,18 @@
       b
       (cons (car a) (list-append (cdr a) b))))  
 
+
+(define (list-equal? a b)
+  (if (null? (cdr a))
+      (= (car a) (car b))
+      (list-equal? (cdr a) (cdr b))))
+
+(define (map proc items)
+  (if (null? items)
+      null
+      (cons (proc (car items))
+            (map proc (cdr items)))))
+
 (= 3 (list-ref items 2))
 (= 4 (list-length items))
 (= 4 (list-length-iter items 0))
