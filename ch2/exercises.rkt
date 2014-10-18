@@ -144,6 +144,81 @@
 ;; //TODO
 
 
+#lang racket
+
+;; our simple library for lists
+
+;; (define (map proc items)
+;;   (if (null? items)
+;;       null
+;;       (cons (proc (car items))
+;;             (map proc (cdr items)))))
+
+;; (define (filter pred seq)
+;;  (cond [(null? seq) null]
+;;        [(pred (car seq))
+;;         (cons (car seq)
+;;               (filter pred (cdr seq)))]
+;;        [else (filter pred (cdr seq))]))
+
+(define (accumulate op initial seq)
+  (if (null? seq)
+      initial
+      (op (car seq)
+          (accumulate op initial (cdr seq)))))
+
+(define (range low high)
+  (if (> low high)
+      null
+      (cons low (range (+ 1 low) high))))
+
+;; (define (append a b)
+;;   (if (null? a)
+;;       b
+;;       (cons (car a)
+;;             (append (cdr a) b))))
+
+(define (leaves->list tree)
+  (cond [(null? tree) null]
+        [(not (pair? tree)) (list tree)]
+        [else (append (leaves->list (car tree))
+                      (leaves->list (cdr tree)))]))
+
+;; Exercise 2.33
+(define (map proc sequence)
+  (accumulate (λ (x y) (cons (proc x) y))
+              '()
+              sequence))
+
+(define (append a b)
+  (accumulate cons b a))
+
+(define (length sequence)
+  (accumulate (λ (x y) (+ 1 y)) 0 sequence))
+
+;; Exericse 2.33 extra
+(define (filter pred sequence) ;; WRONG!
+  (accumulate (λ (x y)
+                (if (pred x)
+                    (cons x y)
+                    null))
+              '()
+              sequence))
+
+
+;; (filter odd? '(1 2 3 4 5 6))
+(append '(1 2) '(3 4))
+(length '(1 2 3 4))
+
+;; Exercise 2.35
+
+(define (count-leaves tree)
+  (accumulate (λ (x y) (+ 1 y)) 0 (leaves->list tree)))
+
+(count-leaves (cons (list 1 2) (list 3 4)))
+
+
+
 
 
 
