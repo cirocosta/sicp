@@ -20,3 +20,4 @@ The ability to create pairs whose elements are pairs is the essence of list stru
 
 100 functions on one data structure can be composed together in lots of unique ways, since they all operate on the same data structure. Mixing 10 functions on 10 data structures may not be possible since they are defined only to work on their particular data structure.
 
+The value of expressing programs as sequence operations is that this helps us make program designs that are modular, i.e., designs that are constructed by combining relatively independent pieces. Modular design might be encouraged by providing a library of standard components together with a conventional interface for connecting the components in flexible ways. 
