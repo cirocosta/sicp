@@ -161,6 +161,10 @@
 ;;               (filter pred (cdr seq)))]
 ;;        [else (filter pred (cdr seq))]))
 
+;; the accumulate procedure is also know as fold-
+;; right because it combines the first element of
+;; the sequence with the result of combining all
+;; the elements to the right.
 (define (accumulate op initial seq)
   (if (null? seq)
       initial
@@ -217,10 +221,53 @@
 
 (count-leaves (cons (list 1 2) (list 3 4)))
 
+;; Exercise 2.36
+
+(define (accumulate-n op initial seqs)
+  (if (null? seqs)
+      null
+      (cons (accumulate op initial (car seqs))
+            (accumulate-n op initial (cdr seqs)))))
 
 
+(accumulate-n + 0 (list (list 1 2 3)
+                        (list 4 5 6)
+                        (list 7 8 9)))
 
 
+;; Fold-left and Fold-right
+
+(define (fold-left op initial seq)
+  (λ (iter result rest)
+    (if (null? rest)
+        result
+        (iter (op result (car rest))
+              (cdr rest)))) initial seq)
+
+;; Exercise 2.39
+
+(define (append a b)
+  (if (null? a)
+      b
+      (cons (car a) 
+            (append (cdr a) b))))
+
+(append '(1 2 3) '(4 5 6))
+
+(define (reverse sequence)
+  (fold-left
+   (λ (x y) (append (list x) y)) 
+   null 
+   sequence))
+
+(define (foldr-reverse sequence)
+  (accumulate
+   (λ (x y)
+     (append y (list x)))
+   null
+   sequence))
+
+(equals (reverse '(1 2 3)) '(3 2 1))
 
 
 
