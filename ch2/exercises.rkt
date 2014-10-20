@@ -269,6 +269,38 @@
 
 (equals (reverse '(1 2 3)) '(3 2 1))
 
+;; produces a flat list from a map procedure that create lists for the items.
+(define (flatmap proc seq)
+  (accumulate append null (map proc seq)))
+
+(define (permutations s)
+  (if (null? s)
+      (list null)
+      (flatmap (λ (x)
+                 (map (λ (p) (cons x p))
+                      (permutations (remove x s))))
+               s)))
+
+(permutations (list 1 2 3))
+
+(flatmap (λ (x) (list (* x x))) '(1 2 3))
+
+
+(define (range low high)
+  (if (> low high)
+      null
+      (cons low (range (+ low 1) high))))
+
+(define (unique-pairs n)
+  (flatmap (λ (x)
+             (map (λ (y)
+                    (list x y))
+                  (range (+ x 1) n)))
+           (range 1 (- n 1))))
+
+(unique-pairs 3)
+
+
 
 
 
