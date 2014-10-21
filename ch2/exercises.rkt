@@ -302,7 +302,14 @@
 
 
 
+;; Exercise 2.55
 
+;; When using quote with an expression, what is
+;; actually happening is telling scheme to expand
+;; that to (quote ...). In the case of 
+;; (car ''something), what will happen is:
+;; (car (quote (quote something))). It is like:
+;; (car 'quote something).
 
 
 
