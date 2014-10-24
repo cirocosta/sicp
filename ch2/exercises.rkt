@@ -91,16 +91,6 @@
 (not (equals (list 1 2 3) (list 4 5 6)))
 
 
-
-
-
-
-
-
-
-
-
-
 #lang racket
 
 ;; Exercises 2.30 2.31
@@ -300,6 +290,14 @@
 
 (unique-pairs 3)
 
+;; extra
+
+;; based on memq implementation that sicp
+;; provides, we are able to implement javascript's
+;; Array.prototype.some method using a variation
+;; of the memq and forEach
+
+(define (memq symb items))
 
 
 ;; Exercise 2.55
@@ -311,7 +309,30 @@
 ;; (car (quote (quote something))). It is like:
 ;; (car 'quote something).
 
+(define (memq symb items)
+  (cond [(null? items) null]
+        [(eq? (car items) items)]
+        [else (memq symb (cdr items))]))
 
+(define (for-each proc items)
+  (if (null? items)
+      null
+      (begin
+        (proc (car items))
+        (for-each proc (cdr items)))))
+
+(define (some proc items)
+  (cond [(null? items) null]
+        [(proc items) null]
+        [else (some proc (cdr items))]))
+      
+
+(for-each (λ (x) (display x)) '(1 2 3))
+
+(some (λ (x)
+        (begin
+          (display "cool")
+          (> (car x) 1))) '(1 2 3 4))
 
 
 
