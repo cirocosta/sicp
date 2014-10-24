@@ -92,3 +92,55 @@
 
 (element-of-set? 'a '(1 2 a 3))
 (adjoin-set 'a '(1 2 a 3))
+
+
+;; Now with an ORDERED List 
+
+#lang racket
+
+;; as we know that the set is ordered, we no
+;; longer need to search through the entire set
+;; (not talking about worst case). On the average
+;; we are going to take O(n/2)
+(define (element-of-set? x set)
+  (cond [(null? set) false]
+        [(= x (car set)) true]
+        [(< x (car set)) false]
+        [else (element-of-set? x (cdr set))]))
+
+
+;; the idea here is somewhat similar to what we do
+;; in the merge-sort algorithm where we have some
+;; sort of 'two pointers' and then move them
+;; acordingly when doing the merge process.
+
+;; from the book:
+
+;; Begin by comparing the initial elements, x1 and
+;; x2, of the two sets. If x1 equals x2, then that
+;; gives an element of the intersection, and the
+;; rest of the intersection is the intersection of
+;; the cdrs of the two sets. Suppose, however,
+;; that x1 is less than x2. Since x2 is the
+;; smallest element in set2, we can immediately
+;; conclude that x1 cannot appear anywhere in set2
+;; and hence is not in the intersection. Hence,
+;; the intersection is equal to the intersection
+;; of set2 with the cdr of set1. Similarly, if x2
+;; is less than x1, then the intersection is given
+;; by the intersection of set1 with the cdr of
+;; set2
+
+(define (intersection-set a b)
+  (if (or (null? a) (null? b))
+      '()
+      (let ([x1 (car a)] [x2 (car b)])
+        (cond [(= x1 x2)
+               (cons x1 (intersection-set (cdr a)
+                                          (cdr b)))]
+              [(< x1 x2)
+               (intersection-set (cdr a) b)]
+              [(< x2 x1)
+               (intersection-set a (cdr b))]))))
+
+;; such improve! Now we are dealing with o(n) :)
