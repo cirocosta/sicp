@@ -144,3 +144,57 @@
                (intersection-set a (cdr b))]))))
 
 ;; such improve! Now we are dealing with o(n) :)
+
+
+;; sets as binary trees
+
+;; If now we represent our data structure with a
+;; binary tree we are not able to reduce even more
+;; the look-up time to o(log(n)).
+
+#lang racket
+
+(define (entry tree)
+  (car tree))
+
+(define (left-branch tree)
+  (cadr tree))
+
+(define (right-branch tree)
+  (caddr tree))
+
+(define (make-tree entry left right)
+  (list entry left right))
+
+;; the strategy for the look-up of a variable is as follows:
+;; if the entry of the tree that we are looking equals the number
+;; we are searching, then return true, otherwise, jump to the tree
+;; depending if the entry is greater or minor than the x.
+(define (element-of-set? x set)
+  (cond [(null? set) false]
+        [(= x (entry set)) true]
+        [(< x (entry set))
+         (element-of-set? x (left-branch set))]
+        [(> x (entry set))
+         (element-of-set? x (right-branch set))]))
+
+
+;; For adjoining a X to a set is somewhat similar to the element-of-set procedure.
+;; Actually, the asymp time is almost equal (o(log n)). The approach is:
+;; not considering the trivial case, find in which branch the value will 
+;; go and then keep accumulating regarding that (accumulate with make-tree).
+(define (adjoin-set x set)
+  (cond [(null? set) (make-tree x '() '())]
+        [(= x (entry set)) set]
+        [(< x (entry set))
+         (make-tree (entry set)
+                    (adjoin-set x (left-branch set))
+                    (right-branch set))]
+        [(> x (entry set))
+         (make-tree (entry set)
+                    (left-branch set)
+                    (adjoin-set x (right-branch set)))]))
+
+;; we need to remember something from DS classes: o(log n) is average time, i.e,
+;; for balanced trees. We could use, maybe, B-tress and red-black trees. Let's
+;; implement this further ;)
