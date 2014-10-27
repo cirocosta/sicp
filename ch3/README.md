@@ -22,3 +22,15 @@ Peter and Paul have, then, a join-account. If we are searching for all the place
 In general, programming with assignment forces us to carefully consider the relative orders of the assignments to make sure that each statement is using the correct version of the variables that have been changed.
 
 ps.: referential transparency is one of the principles of functional programming; only referentially transparent functions can be memoized. 
+
+## Environment model of Evaluation
+
+As said before, our previous definition for procedure application with the substitution model is no longer valid as the concept of variable is no longer considered merely a name for a value (but a reference to place of storage). We used to say:
+
+> To apply a compound procedure to arguments, evaluate the obdy of the procedure with each formal replaced by the corresponding argument.
+
+Now, the place of storage that the variables will point will be what will call the 'environment', which is a sequence of frames - tables, possibly empty of bindings -, each containing a pointer to its encolosing environment. The environments is what determines the context in which an expression should be evaluated. 
+
+> Indeed, one could say that expressions in a programming language do not, in themselves, have any meaning. Rather, an expression acquires a meaning only with respect to some environment in which it is evaluated. Even the interpretation of an expression as straightforward as (+ 1 1) depends on an understanding that one is operating in a context in which + is the symbol for addition. 
+
+In the environment model of evaluation a procedure is always a pair consisting of some code and a pointer to an environment. 
